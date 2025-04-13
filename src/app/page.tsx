@@ -18,41 +18,59 @@ export default function Home() {
   const { setOpen } = useIDKit();
 
   const onSuccess = (result: ISuccessResult) => {
-    // Redirect to Chainlink learning page after successful verification
     window.location.href = "https://learn-chainlink-on-world.vercel.app/";
   };
 
   const handleProof = async (result: ISuccessResult) => {
-    console.log(
-      "Proof received from IDKit, sending to backend:\n",
-      JSON.stringify(result)
-    ); // Log the proof from IDKit to the console for visibility
+    console.log("Proof received from IDKit, sending to backend:\n", JSON.stringify(result));
     const data = await verify(result);
     if (data.success) {
-      console.log("Successful response from backend:\n", JSON.stringify(data)); // Log the response from our backend for visibility
+      console.log("Successful response from backend:\n", JSON.stringify(data));
     } else {
       throw new Error(`Verification failed: ${data.detail}`);
     }
   };
 
   return (
-    <div>
-      <div className="flex flex-col items-center justify-center align-middle h-screen">
-        <p className="text-2xl mb-5">World ID Cloud Template</p>
-        <IDKitWidget
-          action={action}
-          app_id={app_id}
-          onSuccess={onSuccess}
-          handleVerify={handleProof}
-          verification_level={VerificationLevel.Orb} // Change this to VerificationLevel.Device to accept Orb- and Device-verified users
-        />
-        <button
-          className="border border-black rounded-md"
-          onClick={() => setOpen(true)}
-        >
-          <div className="mx-3 my-1">Verify with World ID</div>
-        </button>
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 to-black text-white">
+      <div className="container mx-auto px-4 py-16">
+        <div className="max-w-3xl mx-auto text-center">
+          <h1 className="text-4xl md:text-6xl font-bold mb-6 bg-clip-text text-transparent bg-gradient-to-r from-blue-400 to-purple-600">
+            Verify Your Humanity
+          </h1>
+          <p className="text-xl md:text-2xl text-gray-300 mb-8">
+            Access the Chainlink Learning Course
+          </p>
+          
+          <div className="bg-gray-800/50 backdrop-blur-lg rounded-2xl p-8 mb-8">
+            <p className="text-gray-300 mb-6">
+              To ensure a fair learning environment and prevent abuse, we require human verification.
+              This helps us maintain the quality of our educational resources.
+            </p>
+            
+            <div className="flex justify-center">
+              <button
+                onClick={() => setOpen(true)}
+                className="px-8 py-4 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full text-white font-semibold hover:from-blue-600 hover:to-purple-700 transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                Verify with World ID
+              </button>
+            </div>
+          </div>
+
+          <div className="text-gray-400 text-sm">
+            <p>Powered by World ID • Secure and Privacy-Preserving</p>
+          </div>
+        </div>
       </div>
+
+      <IDKitWidget
+        action={action}
+        app_id={app_id}
+        onSuccess={onSuccess}
+        handleVerify={handleProof}
+        verification_level={VerificationLevel.Orb}
+      />
     </div>
   );
 }
