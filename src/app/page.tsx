@@ -18,11 +18,8 @@ export default function Home() {
   const { setOpen } = useIDKit();
 
   const onSuccess = (result: ISuccessResult) => {
-    // This is where you should perform frontend actions once a user has been verified, such as redirecting to a new page
-    window.alert(
-      "Successfully verified with World ID! Your nullifier hash is: " +
-        result.nullifier_hash
-    );
+    // Redirect to Chainlink learning page after successful verification
+    window.location.href = "https://learn-chainlink-on-world.vercel.app/";
   };
 
   const handleProof = async (result: ISuccessResult) => {
