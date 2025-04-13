@@ -22,10 +22,6 @@ export default function Home() {
 
   const onSuccess = (result: ISuccessResult) => {
     setIsVerified(true);
-    window.alert(
-      "Successfully verified with World ID! Your nullifier hash is: " +
-        result.nullifier_hash
-    );
   };
 
   const handleProof = async (result: ISuccessResult) => {
@@ -83,6 +79,9 @@ export default function Home() {
           >
             <span className="text-white text-2xl">Tap Me</span>
           </div>
+          <p className="text-gray-600 mt-8 text-center">
+            Check back everyday, there may be some surprise!
+          </p>
         </div>
       </div>
     </div>
