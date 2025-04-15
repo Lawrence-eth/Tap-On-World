@@ -11,6 +11,8 @@ export default function Home() {
   const [score, setScore] = useState(0);
   const [isVerified, setIsVerified] = useState(false);
   const [showSurprise, setShowSurprise] = useState(false);
+  const [surpriseMessage, setSurpriseMessage] = useState('');
+  const [surpriseTitle, setSurpriseTitle] = useState('');
 
   if (!app_id) {
     throw new Error("app_id is not set in environment variables!");
@@ -35,12 +37,26 @@ export default function Home() {
     }
   };
 
+  const showSurpriseMessage = (title: string, message: string) => {
+    setSurpriseTitle(title);
+    setSurpriseMessage(message);
+    setShowSurprise(true);
+    setTimeout(() => setShowSurprise(false), 5000);
+  };
+
   const handleTap = () => {
     const newScore = score + 1;
     setScore(newScore);
     if (newScore === 314) {
-      setShowSurprise(true);
-      setTimeout(() => setShowSurprise(false), 5000); // Hide after 5 seconds
+      showSurpriseMessage(
+        "🎉 Surprise! 🎉",
+        "Fun fact: March 14 (3.14) is World ID's birthday! Thank you for being part of our community!"
+      );
+    } else if (newScore === 422) {
+      showSurpriseMessage(
+        "🌟 Special Achievement! 🌟",
+        "Fun fact: April 22 is a very special day for someone who made World ID possible! Keep tapping to discover more!"
+      );
     }
   };
 
@@ -93,10 +109,9 @@ export default function Home() {
           {showSurprise && (
             <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
               <div className="bg-white p-8 rounded-lg max-w-md text-center transform animate-fade-in">
-                <h2 className="text-2xl font-light mb-4">🎉 Surprise! 🎉</h2>
+                <h2 className="text-2xl font-light mb-4">{surpriseTitle}</h2>
                 <p className="text-gray-600">
-                  Fun fact: March 14 (3.14) is World ID's birthday! 
-                  Thank you for being part of our community!
+                  {surpriseMessage}
                 </p>
               </div>
             </div>
