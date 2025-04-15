@@ -3,13 +3,14 @@
 import { VerificationLevel, IDKitWidget, useIDKit } from "@worldcoin/idkit";
 import type { ISuccessResult } from "@worldcoin/idkit";
 import { verify } from "./actions/verify";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function Home() {
   const app_id = process.env.NEXT_PUBLIC_WLD_APP_ID as `app_${string}`;
   const action = process.env.NEXT_PUBLIC_WLD_ACTION;
   const [score, setScore] = useState(0);
   const [isVerified, setIsVerified] = useState(false);
+  const [showSurprise, setShowSurprise] = useState(false);
 
   if (!app_id) {
     throw new Error("app_id is not set in environment variables!");
@@ -31,6 +32,15 @@ export default function Home() {
       console.log("Successful response from backend:\n", JSON.stringify(data));
     } else {
       throw new Error(`Verification failed: ${data.detail}`);
+    }
+  };
+
+  const handleTap = () => {
+    const newScore = score + 1;
+    setScore(newScore);
+    if (newScore === 314) {
+      setShowSurprise(true);
+      setTimeout(() => setShowSurprise(false), 5000); // Hide after 5 seconds
     }
   };
 
@@ -74,11 +84,24 @@ export default function Home() {
           </div>
           
           <div 
-            className="w-64 h-64 bg-black rounded-full flex items-center justify-center cursor-pointer hover:scale-105 transition-transform duration-200"
-            onClick={() => setScore(prev => prev + 1)}
+            className={`w-64 h-64 bg-black rounded-full flex items-center justify-center cursor-pointer hover:scale-105 transition-transform duration-200 ${showSurprise ? 'animate-bounce' : ''}`}
+            onClick={handleTap}
           >
             <span className="text-white text-2xl">Tap Me</span>
           </div>
+
+          {showSurprise && (
+            <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+              <div className="bg-white p-8 rounded-lg max-w-md text-center transform animate-fade-in">
+                <h2 className="text-2xl font-light mb-4">🎉 Surprise! 🎉</h2>
+                <p className="text-gray-600">
+                  Fun fact: March 14 (3.14) is World ID's birthday! 
+                  Thank you for being part of our community!
+                </p>
+              </div>
+            </div>
+          )}
+
           <p className="text-gray-600 mt-8 text-center">
             Check back everyday, there may be some surprise!
           </p>
