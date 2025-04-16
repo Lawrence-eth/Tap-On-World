@@ -57,6 +57,21 @@ export default function Home() {
         "🌟 Special Achievement! 🌟",
         "Fun fact: April 22 is a very special day for someone who made World ID possible! Keep tapping to discover more!"
       );
+    } else if (newScore === 721) {
+      showSurpriseMessage(
+        "🌍 World ID Milestone! 🌍",
+        "Fun fact: July 21, 2023 marked a historic day when World ID 2.0 was launched, introducing privacy-preserving ZK proofs!"
+      );
+    } else if (newScore === 888) {
+      showSurpriseMessage(
+        "🎮 Lucky Number! 🎮",
+        "888 is considered a super lucky number in many cultures. You're on a lucky streak! Keep tapping!"
+      );
+    } else if (newScore === 1000) {
+      showSurpriseMessage(
+        "🏆 Legendary Achievement! 🏆",
+        "You've reached 1000 taps! You're now part of an elite group of dedicated tappers. What mysteries await beyond?"
+      );
     }
   };
 
