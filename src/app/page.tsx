@@ -1,15 +1,17 @@
 "use client";
 
-import { VerificationLevel, IDKitWidget, useIDKit } from "@worldcoin/idkit";
-import type { ISuccessResult } from "@worldcoin/idkit";
+import { VerificationLevel } from "@worldcoin/idkit-core";
 import { verify } from "./actions/verify";
 import { useState, useEffect } from "react";
+import { ISuccessResult } from "@worldcoin/idkit-core";
+import { IDKitWidget } from "@worldcoin/idkit";
 
 export default function Home() {
   const app_id = process.env.NEXT_PUBLIC_WLD_APP_ID as `app_${string}`;
   const action = process.env.NEXT_PUBLIC_WLD_ACTION;
   const [score, setScore] = useState(0);
   const [isVerified, setIsVerified] = useState(false);
+  const [isVerifying, setIsVerifying] = useState(false);
   const [showSurprise, setShowSurprise] = useState(false);
   const [surpriseMessage, setSurpriseMessage] = useState('');
   const [surpriseTitle, setSurpriseTitle] = useState('');
@@ -21,19 +23,33 @@ export default function Home() {
     throw new Error("action is not set in environment variables!");
   }
 
-  const { setOpen } = useIDKit();
-
-  const onSuccess = (result: ISuccessResult) => {
+  const handleSuccess = (result: ISuccessResult) => {
     setIsVerified(true);
   };
 
-  const handleProof = async (result: ISuccessResult) => {
-    console.log("Proof received from IDKit, sending to backend:\n", JSON.stringify(result));
-    const data = await verify(result);
-    if (data.success) {
-      console.log("Successful response from backend:\n", JSON.stringify(data));
-    } else {
-      throw new Error(`Verification failed: ${data.detail}`);
+  const handleVerify = async (result: ISuccessResult) => {
+    try {
+      setIsVerifying(true);
+      
+      // Send to the backend for verification
+      const data = await verify({
+        nullifier_hash: result.nullifier_hash,
+        merkle_root: result.merkle_root,
+        proof: result.proof,
+        verification_level: result.verification_level
+      });
+      
+      if (data.success) {
+        console.log("Verification successful");
+      } else {
+        console.error("Backend verification failed:", data.detail);
+        throw new Error(data.detail);
+      }
+    } catch (error) {
+      console.error("Verification error:", error);
+      throw error;
+    } finally {
+      setIsVerifying(false);
     }
   };
 
@@ -121,22 +137,26 @@ export default function Home() {
             <p className="text-gray-600 mb-8 max-w-md text-center">
               Please verify with World ID to access the tap game
             </p>
-            <button
-              onClick={() => setOpen(true)}
-              className="px-8 py-3 bg-black text-white font-light tracking-wide hover:bg-gray-900 transition-all duration-300 border border-black"
+            
+            <IDKitWidget
+              app_id={app_id}
+              action={action}
+              onSuccess={handleSuccess}
+              handleVerify={handleVerify}
+              verification_level={VerificationLevel.Orb}
             >
-              Verify with World ID
-            </button>
+              {({ open }) => (
+                <button
+                  onClick={open}
+                  disabled={isVerifying}
+                  className={`px-8 py-3 bg-black text-white font-light tracking-wide hover:bg-gray-900 transition-all duration-300 border border-black ${isVerifying ? 'opacity-70 cursor-not-allowed' : ''}`}
+                >
+                  {isVerifying ? 'Verifying...' : 'Verify with World ID'}
+                </button>
+              )}
+            </IDKitWidget>
           </div>
         </div>
-
-        <IDKitWidget
-          action={action}
-          app_id={app_id}
-          onSuccess={onSuccess}
-          handleVerify={handleProof}
-          verification_level={VerificationLevel.Orb}
-        />
       </div>
     );
   }
