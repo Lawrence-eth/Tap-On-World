@@ -72,6 +72,41 @@ export default function Home() {
         "🏆 Legendary Achievement! 🏆",
         "You've reached 1000 taps! You're now part of an elite group of dedicated tappers. What mysteries await beyond?"
       );
+    } else if (newScore === 1024) {
+      showSurpriseMessage(
+        "🖥️ Binary Milestone! 🖥️",
+        "1024 = 2¹⁰! You've reached a perfect binary number. As a coder's favorite, this number represents 1KB of data!"
+      );
+    } else if (newScore === 1337) {
+      showSurpriseMessage(
+        "🎯 LEET Achievement! 🎯",
+        "1337! You've unlocked the legendary gamer score. Only elite players reach this milestone!"
+      );
+    } else if (newScore === 1969) {
+      showSurpriseMessage(
+        "🚀 Space Odyssey! 🚀",
+        "1969 - The year humans first landed on the moon. Now you're reaching for the stars with your taps!"
+      );
+    } else if (newScore === 2048) {
+      showSurpriseMessage(
+        "🎲 Power Play! 🎲",
+        "2048 = 2¹¹! Remember the addictive sliding tile game? You're just as persistent!"
+      );
+    } else if (newScore === 2140) {
+      showSurpriseMessage(
+        "₿ Crypto Easter Egg! ₿",
+        "2140 is the year when the last Bitcoin will be mined. You've discovered a crypto-history milestone!"
+      );
+    } else if (newScore === 3000) {
+      showSurpriseMessage(
+        "👑 Royal Tapper! 👑",
+        "3000 taps! You're not just playing anymore - you're making history! What secrets lie in the next thousand?"
+      );
+    } else if (newScore === 3141) {
+      showSurpriseMessage(
+        "🥧 Pi Master! 🥧",
+        "3.141 - The first digits of π! You've achieved mathematical perfection in your tapping journey!"
+      );
     }
   };
 
